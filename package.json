@@ -1,7 +1,12 @@
 {
   "name": "react-native-credit-card-ui",
-  "version": "0.0.1",
-  "private": true,
+  "version": "1.0.0",
+  "homepage": "https://github.com/BLemine/react-native-credit-card-ui",
+  "author": {
+    "name": "Lemine"
+  },
+  "license": "MIT",
+  "keywords": ["Credit-Card","UI","React-Native","Ios","Android"],
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -12,9 +17,14 @@
   "dependencies": {
     "creditcardutils": "^1.0.0",
     "prop-types": "^15.7.2",
-    "react": "17.0.1",
-    "react-native": "0.64.2",
     "react-native-flip-card": "^3.5.6"
+  },
+  "peerDependencies": {
+    "creditcardutils": "^1.0.0",
+    "prop-types": "^15.7.2",
+    "react-native-flip-card": "^3.5.6",
+    "react": "17.0.1",
+    "react-native": "0.64.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -24,7 +34,9 @@
     "eslint": "7.14.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "^0.64.0",
-    "react-test-renderer": "17.0.1"
+    "react-test-renderer": "17.0.1",
+    "react": "17.0.1",
+    "react-native": "0.64.2"
   },
   "jest": {
     "preset": "react-native"

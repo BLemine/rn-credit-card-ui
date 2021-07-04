@@ -35,6 +35,8 @@ export default function Example(){
     )
 }
 ```
+You can also check a more complete example from [here](https://github.com/BLemine/react-native-credit-card-ui/blob/master/examples/Sample.js)
+
 ---
 
 ### Props : 

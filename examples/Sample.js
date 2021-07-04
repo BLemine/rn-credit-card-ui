@@ -1,5 +1,5 @@
 import React from "react";
-import CreditCardUI from "../App"
+import CreditCardUI from "../src/components/CreditCardUI"
 export default () => <CreditCardUI
     creditCardNumber="4242424242424242"
     cardCVC="123"
