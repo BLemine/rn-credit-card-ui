@@ -10,9 +10,9 @@ A Credit Card React-Native UI component, it uses **react-native-flip-card** to f
 
 ### Installation : 
 ```shell
-npm i react-native-credit-card-ui
+npm i react-native-credit-card-animated-ui
 # or if you're using yarn : 
-yarn add react-native-credit-card-ui 
+yarn add react-native-credit-card-animated-ui 
 ```
 ---
 ### Usage : 
