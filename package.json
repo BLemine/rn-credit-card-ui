@@ -1,6 +1,6 @@
 {
-  "name": "react-native-credit-card-animated-ui",
-  "version": "1.0.4",
+  "name": "rn-credit-card-ui",
+  "version": "1.0.5",
   "main": "./App",
   "homepage": "https://github.com/BLemine/react-native-credit-card-ui",
   "author": {

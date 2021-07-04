@@ -1,23 +1,23 @@
-### React-Native-Credit-Card-Animated-UI : 
+### rn-credit-card-ui : 
 A Credit Card React-Native UI component, it uses **react-native-flip-card** to flip the UI component smoothly and **creditcardutils** to validate the given credit card.
 
 ---
 
 ### Screens : 
-![screens](assets/images/screens.jpg)
+![screens](https://raw.githubusercontent.com/BLemine/react-native-credit-card-animated-ui/master/assets/images/screens.jpg)
 
 ---
 
 ### Installation : 
 ```shell
-npm i react-native-credit-card-animated-ui
+npm i rn-credit-card-ui
 # or if you're using yarn : 
-yarn add react-native-credit-card-animated-ui 
+yarn add rn-credit-card-ui
 ```
 ---
 ### Usage : 
 ```js
-import CreditCardUI from "react-native-credi-card-ui";
+import CreditCardUI from "rn-credit-card-ui";
 
 export default function Example(){
     return (
