@@ -4,9 +4,7 @@ A Credit Card React-Native UI component, it uses **react-native-flip-card** to f
 ---
 
 ### Screens : 
-<img src="assets/images/doc_img1.jpeg" width="150" height="350" />
-<img src="assets/images/doc_img2.jpeg" width="150" height="350" />
-<img src="assets/images/doc_img3.jpeg" width="150" height="350" />
+![screens](assets/images/screens.PNG)
 
 ---
 
