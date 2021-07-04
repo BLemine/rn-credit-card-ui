@@ -14,12 +14,20 @@ import PropTypes from 'prop-types';
 export default function App(props) {
     const [frontImg, setFrontImg] = React.useState(props.frontImg);
     const [backImg, setBackImg] = React.useState(props.backImg);
+    const [textColor, setTextStyle] = React.useState(props.textColor);
+    const [cardStyle, setCardStyle] = React.useState({
+        width: props.cardWidth,
+        height: props.cardHeight
+    });
+    const [hideCardChip, setHideCardChip] = React.useState(props.hideCardChip);
+    const [bankLogo, setBankLogo] = React.useState(props.bankLogo);
     const [card, setCard] = React.useState({
-        cardNbr: props.creditCardNumber, 
+        bankName: props.bankName,
+        cardNbr: props.creditCardNumber,
         cardType: "",
         cardDate: props.cardExpiryDate,
         cardCVC: props.cardCVC,
-        cardHolderName: props.cardHolderName, 
+        cardHolderName: props.cardHolderName,
         cardHolderGender: "",
         secureCardNbr: props.secureCardNbr
     })
@@ -92,36 +100,35 @@ export default function App(props) {
         validateCreditCardHolderGender()
     }, [])
     return (
-        <View style={{
-            height: 240,
-        }}>
+        <View style={styles.container}>
             <FlipCard
-                flipHorizontal={props.flipHorizontal} // props.flipHorizontal
-                flipVertical={props.flipVertical} // props.flipVertical
-                onFlipStart={props.onFlipStart} // props.onFlipStart
-                onFlipEnd={props.onFlipEnd} // props.onFlipEnd
+                flipHorizontal={props.flipHorizontal}
+                flipVertical={props.flipVertical}
+                onFlipStart={props.onFlipStart}
+                onFlipEnd={props.onFlipEnd}
             >
                 {/* Face Side */}
 
-                <ImageBackground source={frontImg} style={styles.container} imageStyle={{ borderRadius: 10 }}>
-                    <Image source={require("./assets/images/ce_chip.png")} style={{ position: "absolute", top: 40, left: 10, width: 70, height: 50 }} />
-                    <Text style={{ color: "white", marginTop: "35%", fontSize: 17 }}>
+                <ImageBackground source={frontImg} style={[styles.cardContainer, { width: cardStyle.width, height: cardStyle.height }]} imageStyle={{ borderRadius: 10 }}>
+                    {bankLogo == null ?
+                        <Text style={[styles.bankName, { color: textColor }]}>{card.bankName}</Text>
+                        :
+                        <Image source={bankLogo} style={styles.bankLogo} />
+                    }
+                    {!hideCardChip && <Image source={require("./assets/images/ce_chip.png")} style={styles.cardChip} />}
+                    <Text style={[styles.creditCardNumberText, { color: textColor }]}>
                         {!card.secureCardNbr ? creditcardutils.formatCardNumber(card.cardNbr) : "************" + card.cardNbr.substring(12, 16)}
                     </Text>
-                    <Text style={{ color: "white", marginTop: 10 }}>VALID {card.cardDate}</Text>
-                    <Text style={{ color: "white", position: "absolute", bottom: 15, left: 15 }}>{card.cardHolderGender + " " + card.cardHolderName}</Text>
-                    {creditCardLogo() !== null && <Image source={creditCardLogo()} style={{ position: "absolute", bottom: 15, right: 15, width: 78, height: 48 }} />}
+                    <Text style={[styles.creditCardDate, { color: textColor }]}>VALID {card.cardDate}</Text>
+                    <Text style={[styles.creditCardHolderNameText, { color: textColor }]}>{card.cardHolderGender + " " + card.cardHolderName.toUpperCase()}</Text>
+                    {creditCardLogo() !== null && <Image source={creditCardLogo()} style={styles.creditCardTypeLogo} />}
                 </ImageBackground>
                 {/* Back Side */}
 
-                <ImageBackground source={backImg} style={[styles.container, { alignContent: "center", justifyContent: "center" }]} imageStyle={{ borderRadius: 10 }}>
-                    <View style={{
-                        width: "100%",
-                        height: 30,
-                        backgroundColor: "white",
-                        justifyContent: "center"
-                    }}>
-                        <Text style={{ fontWeight: "bold", textAlign: "center", position: "absolute", right: 20 }}>{card.cardCVC}</Text>
+                <ImageBackground source={backImg} style={[styles.cardContainer, { alignContent: "center", justifyContent: "center", width: cardStyle.width, height: cardStyle.height }]} imageStyle={{ borderRadius: 10 }}>
+                    <View style={styles.blackBanner} />
+                    <View style={styles.whiteBanner}>
+                        <Text style={styles.cvcText}>{card.secureCardNbr ? "**" + card.cardCVC.toString().substring(1, 2) : card.cardCVC}</Text>
                     </View>
                 </ImageBackground>
             </FlipCard>
@@ -132,38 +139,108 @@ export default function App(props) {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        //justifyContent: "center",
+        height: 240,
+        alignItems: "center"
+    },
+    cardContainer: {
         marginTop: 10,
         alignItems: "center",
-        marginRight: 5,
-        marginLeft: 5,
         borderRadius: 10,
-        height: 220,
         borderWidth: 1,
         borderColor: "grey"
     },
+    blackBanner: {
+        width: "100%",
+        height: 40,
+        backgroundColor: "black",
+        position: "absolute",
+        top: 20
+    },
+    whiteBanner: {
+        width: "100%",
+        height: 30,
+        backgroundColor: "white",
+        justifyContent: "center"
+    },
+    cvcText: {
+        fontWeight: "bold",
+        textAlign: "center",
+        position: "absolute",
+        right: 20
+    },
+    creditCardNumberText: {
+        marginTop: "25%",
+        fontSize: 17
+    },
+    creditCardHolderNameText: {
+        position: "absolute",
+        bottom: 15,
+        left: 15
+    },
+    bankLogo: {
+        position: "absolute",
+        top: 20,
+        right: 20,
+        width: 60,
+        height: 40
+    },
+    bankName: {
+        position: "absolute",
+        top: 20,
+        right: 20,
+        fontWeight: "bold"
+    },
+    creditCardTypeLogo: {
+        position: "absolute",
+        bottom: 15,
+        right: 15,
+        width: 78,
+        height: 48
+    },
+    creditCardDate: {
+        marginTop: 10
+    },
+    cardChip: {
+        position: "absolute",
+        top: 40,
+        left: 10,
+        width: 60,
+        height: 40
+    }
 })
 
 App.propTypes = {
+    bankName: PropTypes.string,
+    bankLogo: PropTypes.object,
+
+    hideCardChip: PropTypes.bool,
+
     creditCardNumber: PropTypes.string,
     cardCVC: PropTypes.string,
     cardHolderName: PropTypes.string,
     cardExpiryDate: PropTypes.string,
-    frontImg: PropTypes.object,
-    backImg: PropTypes.object,
+    frontImg: PropTypes.any,
+    backImg: PropTypes.any,
+    textColor: PropTypes.string,
+    cardWidth: PropTypes.any,
+    cardHeight: PropTypes.any,
 
     onFlipEnd: PropTypes.func,
     onFlipStart: PropTypes.func,
     flipHorizontal: PropTypes.bool,
     flipVertical: PropTypes.bool,
 
-    secureCardNbr:PropTypes.bool
+    secureCardNbr: PropTypes.bool
 }
 
 App.defaultProps = {
+    bankName: "BANK OF SOMETHING",
+    bankLogo: null,
+
+    hideCardChip: false,
+
     creditCardNumber: "4242424242424242",
-    cardCVC:"123",
+    cardCVC: "123",
     flipHorizontal: true,
     flipVertical: false,
     onFlipEnd: () => void 0,
@@ -171,7 +248,11 @@ App.defaultProps = {
     cardHolderGender: "mr",
     cardHolderName: "Tomas Edison",
     cardExpiryDate: "02/24",
-    frontImg: { uri: "https://blog.iakaa.com/wp-content/uploads/2014/10/google-earth-1.jpg" },
-    backImg: { uri: "https://blog.iakaa.com/wp-content/uploads/2014/10/google-earth-1.jpg" },
-    secureCardNbr:true
+    frontImg: require("./assets/images/cardImg.png"),
+    backImg: require("./assets/images/cardImg.png"),
+    textColor: "white",
+    cardWidth: Dimensions.get('window').width - 20,
+    cardHeight: 200,
+
+    secureCardNbr: false
 }
