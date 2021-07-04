@@ -64,4 +64,4 @@ You can also check a more complete example from [here](https://github.com/BLemin
 ---
 
 ### Contribution : 
-Feel free to contribute to this project by sending your custom PR.
+Feel free to contribute to this project by sending your custom PR [here](https://github.com/BLemine/rn-credit-card-ui).
