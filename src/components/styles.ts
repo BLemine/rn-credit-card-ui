@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     container: {
         height: 240,
@@ -6,6 +6,8 @@ export const styles = StyleSheet.create({
     },
     cardContainer: {
         marginTop: 10,
+        alignContent: "center",
+        justifyContent: "center",
         alignItems: "center",
         borderRadius: 10,
         borderWidth: 1,
@@ -31,7 +33,7 @@ export const styles = StyleSheet.create({
         right: 20
     },
     creditCardNumberText: {
-        marginTop: "25%",
+        // marginTop: "25%",
         fontSize: 17
     },
     creditCardHolderNameText: {
@@ -40,16 +42,18 @@ export const styles = StyleSheet.create({
         left: 15
     },
     bankLogo: {
-        position: "absolute",
-        top: 20,
-        right: 20,
         width: 60,
         height: 40
     },
-    bankName: {
+    bankLogoContainer: {
         position: "absolute",
         top: 20,
         right: 20,
+        justifyContent: "center",
+        alignItems: "center",
+        alignSelf: "center",
+    },
+    bankName: {
         fontWeight: "bold"
     },
     creditCardTypeLogo: {
@@ -59,8 +63,18 @@ export const styles = StyleSheet.create({
         width: 78,
         height: 48
     },
-    creditCardDate: {
-        marginTop: 10
+    cardNumberContainer: {
+        marginTop: "20%"
+    },
+    cardNumberLabel: {
+        color: "white"
+    },
+    expiryDateContainer: {
+        marginTop: 10,
+        flexDirection: "row"
+    },
+    expiryDateLabel: {
+        marginRight: 10
     },
     cardChip: {
         position: "absolute",

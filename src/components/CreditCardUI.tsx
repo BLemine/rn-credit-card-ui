@@ -1,78 +1,107 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import {
     View,
     Text,
-    Dimensions,
     ImageBackground,
-    Image,
-    ImageSourcePropType,
+    Image
 } from "react-native"
 import FlipCard from 'react-native-flip-card'
-const creditcardutils = require('creditcardutils');
-import PropTypes from 'prop-types';
 import { styles } from "./styles";
-import { creditCardTypes } from "../../constants";
+import { colors, creditCardTypes } from "../../constants";
+import { widthPercentageToDP, heightPercentageToDP } from "react-native-responsive-screen";
+import { CreditCardPropsType } from "../types";
+const creditcardutils = require('creditcardutils');
 
-enum Gender {
-    mr = "mr",
-    mrs = "mrs",
-    miss = "miss"
-}
-type CreditCardPropsType = {
-    frontImg: ImageSourcePropType;
-    backImg: ImageSourcePropType;
-    textColor?: string;
-    cardWidth: string | number;
-    cardHeight: string | number;
-    hideCardChip?: boolean;
-    bankLogo: ImageSourcePropType;
-    bankName: string;
-    creditCardNumber: string;
-    cardExpiryDate: string;
-    cardCVC: number | string;
-    cardHolderName: string;
-    secureCardNbr: boolean;
-    cardHolderGender: Gender;
+const initProps = {
+    bankName: "BANK OF SOMETHING",
+    // bankLogo: require(""),
 
-    flipHorizontal: boolean;
-    flipVertical: boolean;
-    onFlipStart: (isFlipped: boolean) => void;
-    onFlipEnd: (isFlipped: boolean) => void;
+    cardNumber: "4242424242424242",
+    cvc: "123",
+    isHorizontalFlipEnabled: true,
+    isVerticalFlipEnabled: false,
+    holderGender: "mr",
+    holderName: "Tomas Edison",
+    expiryDate: "02/24",
+    frontImg: require("../../assets/images/cardImg.png"),
+    backImg: require("../../assets/images/cardImg.png"),
+    textColor: "white",
+    cardWidth: widthPercentageToDP(85),
+    cardHeight: heightPercentageToDP(22),
+
+    isCardNumberShown: true,
+    isCardChipShown: true,
+
+    dateLabel: "VALID",
+
+    onFlipEnd: () => void 0,
+    onFlipStart: () => void 0,
 }
 export default function CreditCardUI(props: CreditCardPropsType) {
-    // const {}
-    const [frontImg, setFrontImg] = React.useState(props.frontImg);
-    const [backImg, setBackImg] = React.useState(props.backImg);
-    const [textColor, setTextStyle] = React.useState(props.textColor);
-    const [cardStyle, setCardStyle] = React.useState({
-        width: props.cardWidth,
-        height: props.cardHeight
-    });
-    const [hideCardChip, setHideCardChip] = React.useState(props.hideCardChip);
-    const [bankLogo, setBankLogo] = React.useState(props.bankLogo);
-    const [card, setCard] = React.useState({
-        bankName: props.bankName,
-        cardNbr: props.creditCardNumber,
-        cardType: "",
-        cardDate: props.cardExpiryDate,
-        cardCVC: props.cardCVC,
-        cardHolderName: props.cardHolderName,
-        cardHolderGender: "",
-        secureCardNbr: props.secureCardNbr
-    })
+    const {
+        frontImg = initProps.backImg,
+        backImg = initProps.backImg,
 
-    const creditCardLogo = () => creditCardTypes.find((el) => el.type === creditcardutils.parseCardType(card.cardNbr))
+        cardFrontContainerStyle,
+        cardFrontImageStyle,
+        cardBackContainerStyle,
+        cardBackImageStyle,
+
+        textColor = colors.white,
+        holderGender,
+        cardNumber,
+        holderName,
+        expiryDate,
+        cvc,
+
+        bankLogoContainerStyle,
+        bankName,
+        bankNameStyle,
+        bankLogoStyle,
+
+        cardWidth = initProps.cardWidth,
+        cardHeight = initProps.cardHeight,
+        bankLogo,
+
+        dateContainerStyle,
+        dateLabel = initProps.dateLabel,
+        dateLabelStyle,
+        dateStyle,
+
+        cardNumberContainerStyle,
+        cardNumberLabel,
+        cardNumberLabelStyle,
+        cardNumberStyle,
+
+        cardChip,
+        cardChipStyle,
+
+        cardTypeLogoStyle,
+
+        blackBannerStyle,
+        whiteBannerStyle,
+
+        cvcLabel,
+        cvcLabelStyle,
+        cvcStyle,
+
+        holderNameStyle,
+
+        isCardChipShown = initProps.isCardChipShown,
+        isCardNumberShown = initProps.isCardNumberShown,
+        isHorizontalFlipEnabled = initProps.isHorizontalFlipEnabled,
+        isVerticalFlipEnabled = initProps.isVerticalFlipEnabled,
+        onFlipStart = initProps.onFlipStart,
+        onFlipEnd = initProps.onFlipEnd
+    } = props;
+    const [holderGenderStatus, setHolderGenderStatus] = React.useState<string>("");
+
+    const creditCardLogo = () => creditCardTypes.find((el) => el.type === creditcardutils.parseCardType(cardNumber))
 
     const validateCreditCardHolderGender = () => {
-        if (props.cardHolderGender !== null) {
-            if (["mr", "miss", "mrs"].includes(props.cardHolderGender)) {
-                setCard({ ...card, cardHolderGender: props.cardHolderGender.toUpperCase() })
-            } else {
-
-            }
-        } else {
-
-        }
+        if (holderGender !== null)
+            if (["mr", "miss", "mrs"].includes(holderGender))
+                setHolderGenderStatus(holderGender.toUpperCase())
     }
     React.useEffect(() => {
         validateCreditCardHolderGender()
@@ -80,87 +109,92 @@ export default function CreditCardUI(props: CreditCardPropsType) {
     return (
         <View style={styles.container}>
             <FlipCard
-                flipHorizontal={props.flipHorizontal}
-                flipVertical={props.flipVertical}
-                onFlipStart={props.onFlipStart}
-                onFlipEnd={props.onFlipEnd}
+                flipHorizontal={isHorizontalFlipEnabled}
+                flipVertical={isVerticalFlipEnabled}
+                onFlipStart={onFlipStart}
+                onFlipEnd={onFlipEnd}
             >
                 {/* Face Side */}
-
-                <ImageBackground source={frontImg} style={[styles.cardContainer, { width: cardStyle.width, height: cardStyle.height }]} imageStyle={{ borderRadius: 10 }}>
-                    {bankLogo == null ?
-                        <Text style={[styles.bankName, { color: textColor }]}>{card.bankName}</Text>
+                <ImageBackground
+                    source={frontImg}
+                    style={[styles.cardContainer, { width: cardWidth, height: cardHeight }, cardFrontContainerStyle]}
+                    imageStyle={[{ borderRadius: 10 }, cardFrontImageStyle]}
+                >
+                    <View style={[styles.bankLogoContainer, bankLogoContainerStyle]}>
+                        {bankLogo !== undefined ?
+                            <Image source={bankLogo} style={[styles.bankLogo, bankLogoStyle]} />
+                            :
+                            <></>
+                        }
+                        {bankName !== undefined ?
+                            <Text style={[styles.bankName, { color: textColor }, bankNameStyle]}>
+                                {bankName}
+                            </Text>
+                            : <></>
+                        }
+                    </View>
+                    {isCardChipShown ?
+                        <Image source={cardChip ? cardChip : require("../../assets/images/ce_chip.png")} style={[styles.cardChip, cardChipStyle]} />
                         :
-                        <Image source={bankLogo} style={styles.bankLogo} />
+                        <></>
                     }
-                    {!hideCardChip && <Image source={require("../../assets/images/ce_chip.png")} style={styles.cardChip} />}
-                    <Text style={[styles.creditCardNumberText, { color: textColor }]}>
-                        {!card.secureCardNbr ? creditcardutils.formatCardNumber(card.cardNbr) : "************" + card.cardNbr.substring(12, 16)}
+                    <View style={[styles.cardNumberContainer, cardNumberContainerStyle]}>
+                        <Text style={[styles.cardNumberLabel, cardNumberLabelStyle]}>
+                            {cardNumberLabel}
+                        </Text>
+                        <Text style={[styles.creditCardNumberText, { color: textColor }, cardNumberStyle]}>
+                            {isCardNumberShown ?
+                                creditcardutils.formatCardNumber(cardNumber)
+                                :
+                                "**** **** **** " + cardNumber.substring(12, cardNumber.length)
+                            }
+                        </Text>
+                    </View>
+
+                    <View style={[styles.expiryDateContainer, dateContainerStyle]}>
+                        <Text style={[{
+                            color: textColor,
+                        }, styles.expiryDateLabel, dateLabelStyle]}>
+                            {dateLabel}
+                        </Text>
+                        <Text style={[{ color: textColor }, dateStyle]}>
+                            {expiryDate}
+                        </Text>
+                    </View>
+
+                    <Text style={[styles.creditCardHolderNameText, { color: textColor }, holderNameStyle]}>
+                        {holderGenderStatus + " " + holderName.toUpperCase()}
                     </Text>
-                    <Text style={[styles.creditCardDate, { color: textColor }]}>VALID {card.cardDate}</Text>
-                    <Text style={[styles.creditCardHolderNameText, { color: textColor }]}>{card.cardHolderGender + " " + card.cardHolderName.toUpperCase()}</Text>
-                    {creditCardLogo() !== null && <Image source={{ uri: creditCardLogo()?.uri }} style={styles.creditCardTypeLogo} />}
+                    {creditCardLogo() !== null && <Image
+                        source={{ uri: creditCardLogo()?.uri }}
+                        style={[styles.creditCardTypeLogo, cardTypeLogoStyle]}
+                    />}
                 </ImageBackground>
                 {/* Back Side */}
-
-                <ImageBackground source={backImg} style={[styles.cardContainer, { alignContent: "center", justifyContent: "center", width: cardStyle.width, height: cardStyle.height }]} imageStyle={{ borderRadius: 10 }}>
-                    <View style={styles.blackBanner} />
-                    <View style={styles.whiteBanner}>
-                        <Text style={styles.cvcText}>{card.secureCardNbr ? "**" + card.cardCVC.toString().substring(1, 2) : card.cardCVC}</Text>
+                <ImageBackground
+                    source={backImg}
+                    style={[
+                        styles.cardContainer,
+                        {
+                            width: cardWidth,
+                            height: cardHeight
+                        },
+                        cardBackContainerStyle
+                    ]}
+                    imageStyle={[{ borderRadius: 10 }, cardBackImageStyle]}
+                >
+                    <View style={[styles.blackBanner, blackBannerStyle]} />
+                    <View style={[styles.whiteBanner, whiteBannerStyle]}>
+                        <Text style={[styles.cvcText, cvcStyle]}>
+                            {isCardNumberShown ?
+                                cvc :
+                                "**" + cvc.toString().substring(1, 2)
+                            }
+                        </Text>
                     </View>
                 </ImageBackground>
             </FlipCard>
         </View>
 
     )
-}
-
-
-
-CreditCardUI.propTypes = {
-    bankName: PropTypes.string,
-    bankLogo: PropTypes.object,
-
-    hideCardChip: PropTypes.bool,
-
-    creditCardNumber: PropTypes.string,
-    cardCVC: PropTypes.string,
-    cardHolderName: PropTypes.string,
-    cardExpiryDate: PropTypes.string,
-    frontImg: PropTypes.any,
-    backImg: PropTypes.any,
-    textColor: PropTypes.string,
-    cardWidth: PropTypes.any,
-    cardHeight: PropTypes.any,
-
-    onFlipEnd: PropTypes.func,
-    onFlipStart: PropTypes.func,
-    flipHorizontal: PropTypes.bool,
-    flipVertical: PropTypes.bool,
-
-    secureCardNbr: PropTypes.bool
-}
-
-CreditCardUI.defaultProps = {
-    bankName: "BANK OF SOMETHING",
-    bankLogo: null,
-
-    hideCardChip: false,
-
-    creditCardNumber: "4242424242424242",
-    cardCVC: "123",
-    flipHorizontal: true,
-    flipVertical: false,
-    onFlipEnd: () => void 0,
-    onFlipStart: () => void 0,
-    cardHolderGender: "mr",
-    cardHolderName: "Tomas Edison",
-    cardExpiryDate: "02/24",
-    frontImg: require("../../assets/images/cardImg.png"),
-    backImg: require("../../assets/images/cardImg.png"),
-    textColor: "white",
-    cardWidth: Dimensions.get('window').width - 20,
-    cardHeight: 200,
-
-    secureCardNbr: false
 }
