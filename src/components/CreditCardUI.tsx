@@ -27,7 +27,7 @@ const initProps = {
     backImg: require("../../assets/images/cardImg.png"),
     textColor: "white",
     cardWidth: widthPercentageToDP(85),
-    cardHeight: heightPercentageToDP(22),
+    cardHeight: heightPercentageToDP(25),
 
     isCardNumberShown: true,
     isCardChipShown: true,
